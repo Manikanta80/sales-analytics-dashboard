@@ -29,7 +29,7 @@
 </div>
 
 
-<h2>🏬 Top Performing Stores</h2>
+<h2 style="text-align:center;">🏬 Top Performing Stores</h2>
 
 <table>
 
@@ -40,22 +40,19 @@
 </tr>
 </thead>
 
-<tbody id="store-table">
-<tr>
-<td colspan="2">Loading...</td>
-</tr>
-</tbody>
+<tbody id="store-table"></tbody>
 
 </table>
 
 
-<h2>📊 Store Revenue Comparison</h2>
+<h2 style="text-align:center;">📊 Store Revenue Comparison</h2>
 
-<canvas id="revenueChart"></canvas>
+<canvas id="revenueChart" width="400" height="200"></canvas>
 
 
 <script>
 
+// LOAD KPI DATA
 async function loadDashboard(){
 
 const res = await fetch("/dashboard");
@@ -69,12 +66,15 @@ document.getElementById("profit").innerText =
 
 }
 
+
+// LOAD STORE DATA
 async function loadStores(){
 
 const res = await fetch("/topstores");
 const data = await res.json();
 
 let table = document.getElementById("store-table");
+
 table.innerHTML = "";
 
 let names = [];
@@ -96,10 +96,13 @@ table.innerHTML += row;
 
 });
 
-const ctx = document.getElementById("revenueChart");
+
+const ctx = document.getElementById("revenueChart").getContext("2d");
 
 new Chart(ctx, {
+
 type: "bar",
+
 data: {
 labels: names,
 datasets: [{
@@ -107,12 +110,19 @@ label: "Store Revenue",
 data: revenues
 }]
 }
+
 });
 
 }
 
+
+// PAGE LOAD AYINAKA RUN AVUTHAYI
+window.onload = function(){
+
 loadDashboard();
 loadStores();
+
+}
 
 </script>
 
