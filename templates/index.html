@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Retail Analytics Dashboard</title>
+
+<link rel="stylesheet" href="/static/style.css">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body>
+
+<h1>📊 Retail Sales Analytics Dashboard</h1>
+
+<div class="card-container">
+
+<div class="card">
+<h2>💰 Total Revenue</h2>
+<p id="revenue">Loading...</p>
+</div>
+
+<div class="card">
+<h2>📈 Total Profit</h2>
+<p id="profit">Loading...</p>
+</div>
+
+</div>
+
+
+<h2>🏬 Top Performing Stores</h2>
+
+<table>
+
+<thead>
+<tr>
+<th>Store Name</th>
+<th>Revenue</th>
+</tr>
+</thead>
+
+<tbody id="store-table">
+<tr>
+<td colspan="2">Loading...</td>
+</tr>
+</tbody>
+
+</table>
+
+
+<h2>📊 Store Revenue Comparison</h2>
+
+<canvas id="revenueChart"></canvas>
+
+
+<script>
+
+async function loadDashboard(){
+
+const res = await fetch("/dashboard");
+const data = await res.json();
+
+document.getElementById("revenue").innerText =
+"₹ " + new Intl.NumberFormat('en-IN').format(data.total_revenue);
+
+document.getElementById("profit").innerText =
+"₹ " + new Intl.NumberFormat('en-IN').format(data.total_profit);
+
+}
+
+async function loadStores(){
+
+const res = await fetch("/topstores");
+const data = await res.json();
+
+let table = document.getElementById("store-table");
+table.innerHTML = "";
+
+let names = [];
+let revenues = [];
+
+data.forEach(store => {
+
+names.push(store.store_name);
+revenues.push(store.revenue);
+
+let row = `
+<tr>
+<td>${store.store_name}</td>
+<td>₹ ${new Intl.NumberFormat('en-IN').format(store.revenue)}</td>
+</tr>
+`;
+
+table.innerHTML += row;
+
+});
+
+const ctx = document.getElementById("revenueChart");
+
+new Chart(ctx, {
+type: "bar",
+data: {
+labels: names,
+datasets: [{
+label: "Store Revenue",
+data: revenues
+}]
+}
+});
+
+}
+
+loadDashboard();
+loadStores();
+
+</script>
+
+</body>
+</html>
