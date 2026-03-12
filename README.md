@@ -112,7 +112,7 @@ These insights help businesses quickly understand **sales performance and store 
 
 # 👨‍💻 Author
 
-**Manikanta Puppala**
+**Puppala Manikanta**
 
 GitHub:
 https://github.com/Manikanta80
